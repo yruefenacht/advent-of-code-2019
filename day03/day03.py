@@ -6,97 +6,66 @@ wire2 = "L995,U122,R472,U470,R725,U906,L83,U672,R448,U781,L997,U107,R66,D966,L78
 n = 10000
 m = 10000
 matrix = [[0 for i in range(m)] for j in range(n)]
-matrix[0][0] = -1
 intercepts = []
 
 #PART 1
 def process_wire(wire, my_trace, other_trace):
     ops = [n for n in wire.split(',')]
-    cp = [0,0]
+    x = 0
+    y = 0
     for i in range(len(ops)):
         op = ops[i][:1]
         num = int(ops[i][1:])
-        if op == 'R':
-            for i in range(num):
-                if(matrix[cp[0]][cp[1] + i] == other_trace):
-                    intercepts.append([cp[0], cp[1] + i])
-                matrix[cp[0]][cp[1] + i] = my_trace
-            cp[1] += num
-        if op == 'L':
-            for i in range(num):
-                if(matrix[cp[0]][cp[1] - i] == other_trace):
-                    intercepts.append([cp[0], cp[1] - i])
-                matrix[cp[0]][cp[1] - i] = my_trace
-            cp[1] -= num
-        if op == 'U':
-            for i in range(num):
-                if(matrix[cp[0] - i][cp[1]] == other_trace):
-                    intercepts.append([cp[0] - i, cp[1]])
-                matrix[cp[0] - i][cp[1]] = my_trace
-            cp[0] -= num
-        if op == 'D':
-            for i in range(num):
-                if(matrix[cp[0] + i][cp[1]] == other_trace):
-                    intercepts.append([cp[0] + i, cp[1]])
-                matrix[cp[0] + 1][cp[1]] = my_trace
-            cp[0] += num
+        for i in range(num):
+            if op == 'R':
+                y += 1
+            if op == 'L':
+                y -= 1
+            if op == 'U':
+                x -= 1
+            if op == 'D':
+                x += 1
+            if matrix[x][y] == other_trace:
+                intercepts.append([x, y])
+            matrix[x][y] = my_trace
 
 process_wire(wire1, 1, 2)
-process_wire(wire2, 2, 1) 
-intercepts.remove([0, 0])
+process_wire(wire2, 2, 1)
 
 lowest_intercept = [n,m]
 for i in range(len(intercepts)):
     if(abs(intercepts[i][0]) + abs(intercepts[i][1]) < lowest_intercept[0] + lowest_intercept[1]):
-        lowest_intercept[0] = abs(intercepts[i][0])
-        lowest_intercept[1] = abs(intercepts[i][1])
+        lowest_intercept = [abs(intercepts[i][0]), abs(intercepts[i][1])]
 
 print(lowest_intercept[0] + lowest_intercept[1])
 
 #PART 2
-interceptDict = {}
-
-for i in range(len(intercepts)):
-    interceptDict[intercepts[i][0]+intercepts[i][1]] = 0
 
 def count_steps(wire, interception):
     ops = [n for n in wire.split(',')]
-    cp = [0,0]
+    x = 0
+    y = 0
     steps = 0
     for i in range(len(ops)):
         op = ops[i][:1]
         num = int(ops[i][1:])
-        if op == 'R':
-            for i in range(num):
-                if(cp[0] == interception[0] and cp[1] + i == interception[1]):
-                    return steps
-                steps += 1
-            cp[1] += num
-        if op == 'L':
-            for i in range(num):
-                if(cp[0] == interception[0] and cp[1] - i == interception[1]):
-                    return steps
-                steps += 1
-            cp[1] -= num
-        if op == 'U':
-            for i in range(num):
-                if(cp[0] - i == interception[0] and cp[1] == interception[1]):
-                    return steps
-                steps += 1
-            cp[0] -= num
-        if op == 'D':
-            for i in range(num):
-                if(cp[0] + i == interception[0] and cp[1] == interception[1]):
-                    return steps
-                steps += 1
-            cp[0] += num
-
+        for i in range(num):
+            if op == 'R':
+                y += 1
+            if op == 'L':
+                y -= 1
+            if op == 'U':
+                x -= 1
+            if op == 'D':
+                x += 1
+            steps += 1
+            if x == interception[0] and y == interception[1]:
+                return steps
     return steps
 
 min_length = 999999999
 for i in range(len(intercepts)):
     length = count_steps(wire1, intercepts[i]) + count_steps(wire2, intercepts[i])
-    if length < min_length:
-        min_length = length
+    if length < min_length: min_length = length
 
 print(min_length)
