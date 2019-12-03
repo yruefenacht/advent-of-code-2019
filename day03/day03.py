@@ -19,39 +19,84 @@ def process_wire(wire, my_trace, other_trace):
         if op == 'R':
             for i in range(num):
                 if(matrix[cp[0]][cp[1] + i] == other_trace):
-                    intercepts.append([abs(cp[0]), abs(cp[1] + i)])
+                    intercepts.append([cp[0], cp[1] + i])
                 matrix[cp[0]][cp[1] + i] = my_trace
             cp[1] += num
         if op == 'L':
             for i in range(num):
                 if(matrix[cp[0]][cp[1] - i] == other_trace):
-                    intercepts.append([abs(cp[0]), abs(cp[1] - i)])
+                    intercepts.append([cp[0], cp[1] - i])
                 matrix[cp[0]][cp[1] - i] = my_trace
             cp[1] -= num
         if op == 'U':
             for i in range(num):
                 if(matrix[cp[0] - i][cp[1]] == other_trace):
-                    intercepts.append([abs(cp[0] - i), abs(cp[1])])
+                    intercepts.append([cp[0] - i, cp[1]])
                 matrix[cp[0] - i][cp[1]] = my_trace
             cp[0] -= num
         if op == 'D':
             for i in range(num):
                 if(matrix[cp[0] + i][cp[1]] == other_trace):
-                    intercepts.append([abs(cp[0] + i), abs(cp[1])])
+                    intercepts.append([cp[0] + i, cp[1]])
                 matrix[cp[0] + 1][cp[1]] = my_trace
             cp[0] += num
 
 process_wire(wire1, 1, 2)
 process_wire(wire2, 2, 1) 
 intercepts.remove([0, 0])
-print(intercepts)
 
 lowest_intercept = [n,m]
 for i in range(len(intercepts)):
-    if(intercepts[i][0] + intercepts[i][1] < lowest_intercept[0] + lowest_intercept[1]):
-        lowest_intercept[0] = intercepts[i][0]
-        lowest_intercept[1] = intercepts[i][1]
+    if(abs(intercepts[i][0]) + abs(intercepts[i][1]) < lowest_intercept[0] + lowest_intercept[1]):
+        lowest_intercept[0] = abs(intercepts[i][0])
+        lowest_intercept[1] = abs(intercepts[i][1])
 
 print(lowest_intercept[0] + lowest_intercept[1])
 
 #PART 2
+interceptDict = {}
+
+for i in range(len(intercepts)):
+    interceptDict[intercepts[i][0]+intercepts[i][1]] = 0
+
+def count_steps(wire, interception):
+    ops = [n for n in wire.split(',')]
+    cp = [0,0]
+    steps = 0
+    for i in range(len(ops)):
+        op = ops[i][:1]
+        num = int(ops[i][1:])
+        if op == 'R':
+            for i in range(num):
+                if(cp[0] == interception[0] and cp[1] + i == interception[1]):
+                    return steps
+                steps += 1
+            cp[1] += num
+        if op == 'L':
+            for i in range(num):
+                if(cp[0] == interception[0] and cp[1] - i == interception[1]):
+                    return steps
+                steps += 1
+            cp[1] -= num
+        if op == 'U':
+            for i in range(num):
+                if(cp[0] - i == interception[0] and cp[1] == interception[1]):
+                    return steps
+                steps += 1
+            cp[0] -= num
+        if op == 'D':
+            for i in range(num):
+                if(cp[0] + i == interception[0] and cp[1] == interception[1]):
+                    return steps
+                steps += 1
+            cp[0] += num
+
+    return steps
+
+min_length = 999999999
+for i in range(len(intercepts)):
+    length = count_steps(wire1, intercepts[i]) + count_steps(wire2, intercepts[i])
+    if length < min_length:
+        min_length = length
+
+print(min_length)
