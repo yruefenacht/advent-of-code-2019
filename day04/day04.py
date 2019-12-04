@@ -19,11 +19,9 @@ def decreases(string):
 
 valid_pws = 0
 for pw in range(pw_min, pw_max + 1):
-    if len(str(pw)) != 6:
+    if decreases(str(pw)):
         continue
     if not has_double(str(pw)):
-        continue
-    if decreases(str(pw)):
         continue
     valid_pws += 1
 
@@ -31,7 +29,7 @@ print(valid_pws)
 
 # PART 2
 
-def has_extra(string, count):
+def has_double_strict(string, count):
     for i in string:
         c = 0
         for j in string:
@@ -43,14 +41,9 @@ def has_extra(string, count):
 
 valid_pws = 0
 for pw in range(pw_min, pw_max + 1):
-    string = str(pw)
-    if len(string) != 6:
+    if decreases(str(pw)):
         continue
-    if not has_double(string):
-        continue
-    if decreases(string):
-        continue
-    if not has_extra(string, 2):
+    if not has_double_strict(str(pw), 2):
         continue
     valid_pws += 1
 
