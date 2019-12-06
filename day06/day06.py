@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 from collections import defaultdict
 
@@ -26,3 +26,32 @@ def sum_orbits():
     return sum
 
 print(sum_orbits())
+
+# PART 2
+
+orbits = defaultdict(list)
+
+for line in data:
+    com1,com2 = line.split(')')
+    orbits[com2] = com1
+
+def get_orbits(key):
+    ors = []
+    while(orbits[key]):
+        key = orbits[key]
+        ors.append(key)
+    return ors
+
+
+you_orbits = get_orbits("YOU")
+san_orbits = get_orbits("SAN")
+
+common = set(you_orbits).intersection(set(san_orbits))
+
+min_orbits = 999999999
+for i in common:
+    o = you_orbits.index(i) + san_orbits.index(i)
+    if o < min_orbits:
+        min_orbits = o
+        
+print(min_orbits)
