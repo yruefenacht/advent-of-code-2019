@@ -16,7 +16,7 @@ class Layer:
                 if self.matrix[i][j] == num:
                     sum += 1
         return sum
-     
+  
 layers = []
 l = Layer()
 size = l.width * l.height
@@ -25,16 +25,31 @@ while p < len(nums):
     if not p % size:
         l = Layer()
         layers.append(l)
-    for j in range(l.width):
-        for i in range(l.height):
-            l.matrix[i][j] = nums[p]
+    for x in range(l.height):
+        for y in range(l.width):
+            l.matrix[x][y] = nums[p]
             p += 1
 
-min_layer = Layer()
+# PART 1
 
+min_layer = Layer()
 for layer in layers:
     if layer.count_contains_num(0) < min_layer.count_contains_num(0):
         min_layer = layer
 
 part_one = min_layer.count_contains_num(1) * min_layer.count_contains_num(2)
 print(part_one)
+
+# PART 2
+
+for y in range(6):
+    for x in range(25):
+        for layer in layers:
+            if layer.matrix[y][x] != 2:
+                if layer.matrix[y][x] == 1:
+                    print('░', end="")
+                else:
+                    print(' ', end="")
+                break
+    print()
+     
