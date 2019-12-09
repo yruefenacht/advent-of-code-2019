@@ -85,4 +85,4 @@ class IntCode:
                 break
 
 intCode = IntCode(opcodes.split(","))
-intCode.run(1)
+intCode.run(2)
