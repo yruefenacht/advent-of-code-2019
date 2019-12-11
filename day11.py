@@ -33,7 +33,7 @@ def paint():
     p = (0,0)
 
     intComputer.running = True
-    c = 0
+
     while intComputer.running:
         color = intComputer.run(panel[p])
         direction = intComputer.run(panel[p])
@@ -47,8 +47,49 @@ def paint():
         d = turn(d, direction)
         p = move(p, d)
 
-    return len(painted)
+    return painted
 
 # PART 1
-part_one = paint()
+painted = paint()
+part_one = len(painted)
 print(part_one)
+
+def paint2():
+    intComputer = IntCode(opcodes.split(','))
+    panel = defaultdict(int)
+
+    d = 0
+    p = (0,0)
+    panel[p] = 1
+
+    intComputer.running = True
+
+    while intComputer.running:
+        color = intComputer.run(panel[p])
+        direction = intComputer.run(panel[p])
+
+        if not intComputer.running:
+            break
+
+        panel[p] = color
+        
+        d = turn(d, direction)
+        p = move(p, d)
+
+    return panel
+
+# PART 2
+panel = paint2()
+x1 = min(key[0] for key in panel.keys())
+y1 = max(key[0] for key in panel.keys())
+
+x2 = min(key[1] for key in panel.keys())
+y2 = max(key[1] for key in panel.keys())
+
+for y in range(y2, x2-1, -1):
+    for x in range(x1, y1):
+        if panel[(x, y)] == 1:
+            print("░", end="")
+        else:
+            print(" ", end="")
+    print()
