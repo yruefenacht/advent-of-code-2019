@@ -2,7 +2,7 @@
 
 from collections import defaultdict
 
-data = [line.rstrip('\n') for line in open('day06/day06.txt')]
+data = [line.rstrip('\n') for line in open('input/day06.txt')]
 
 orbits = defaultdict(list)
 

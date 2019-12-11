@@ -55,7 +55,7 @@ class IntCode:
                 par1 = self.get_param(mode1, 1)
                 self.output = par1
                 self.ip += 2
-                print(self.output)
+                return self.output
             if op == 5:
                 par1 = self.get_param(mode1, 1)
                 par2 = self.get_param(mode2, 2)
@@ -83,6 +83,7 @@ class IntCode:
             if op == 99:
                 self.running = False
                 break
+        return -1
 
 intCode = IntCode(opcodes.split(","))
-intCode.run(2)
+print(intCode.run(1))

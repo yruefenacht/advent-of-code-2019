@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-data = [line.rstrip('\n') for line in open('day01/day01.txt')]
+data = [line.rstrip('\n') for line in open('input/day01.txt')]
 
 #PART 1
 total_fuel = 0

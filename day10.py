@@ -3,7 +3,7 @@
 from collections import defaultdict
 import math
 
-data = [line.rstrip('\n') for line in open('day10/day10.txt')]
+data = [line.rstrip('\n') for line in open('input/day10.txt')]
 dim = len(data[0])
 
 def get_comets():

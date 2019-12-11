@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-data = [line.rstrip('\n') for line in open('day08/day08.txt')]
+data = [line.rstrip('\n') for line in open('input/day08.txt')]
 nums = [int(x) for x in data[0]]
 
 class Layer:
